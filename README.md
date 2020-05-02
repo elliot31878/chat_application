@@ -1,2 +1,2 @@
 # chat_application
-Simple ChatApplication With Python (Devloped By MR.ROBOT)
+Simple ChatApplication With Python (Developed By MR.ROBOT)
