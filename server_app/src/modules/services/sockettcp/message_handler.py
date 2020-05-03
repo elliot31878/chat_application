@@ -9,8 +9,9 @@ from json import (
 )
 from socket import socket
 
-from modules.data.app_context import AppContext
-from modules.models.user import User
+from modules.models.user import (
+    User
+)
 class MessageHandler:
     def __init__(self, socket_client: socket):
         super().__init__()
@@ -26,7 +27,7 @@ class MessageHandler:
 
         #conditions
 
-        condition_auth(data_json)
+        self.condition_auth(data_json)
 
         del message
     
@@ -34,16 +35,17 @@ class MessageHandler:
         if data_json["command"]=="AUTH":
             username: str = data_json["message"]["username"]
             password: str = data_json["message"]["password"]
-
             try:
-                AppContext.select().where(
+                user=User.select().where(
                     (User.username == username) &(User.password == password)
                 )
-                print("User Authenticated successfully")
-            except Exception as identifier:
-                AppContext.create(
+                if len(user) > 0:
+                    print("User Authenticated successfully")
+                else:
+                    User.create(
                     username=username,
                     password=password
-                )
-
-
+                    )
+            except Exception as identifier:
+                print(identifier)
+            

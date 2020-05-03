@@ -13,7 +13,7 @@ from .message_handler import MessageHandler
 
 class ClientHandler(Thread):
     def __init__(self, client : object, client_address: object):
-        Thread.__init__()
+        Thread.__init__(self)
 
         self.client = client
         self.client_address = client_address
@@ -34,7 +34,7 @@ class ClientHandler(Thread):
                     "from": "server",
                     "group": "brodcast"
                 })
-            ).encode('utf-8'))
+            ).encode("utf-8"))
 
             sleep(.1)
 
@@ -45,7 +45,7 @@ class ClientHandler(Thread):
                     "from": "server",
                     "group": "brodcast"
                 })
-            ).encode('utf-8'))
+            ).encode("utf-8"))
             self.first_message = False
 
         # Add Class Message Handler

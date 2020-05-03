@@ -15,8 +15,8 @@ class StartUp:
         """
         from modules.services.sockettcp.socket_server import socket_server
         from modules.data.app_context import AppContext
-        socket_server().run()
         AppContext()
+        socket_server().run()
 
     def start(self):
         """
