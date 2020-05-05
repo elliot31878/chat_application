@@ -11,8 +11,9 @@ from socket import (
 
 from .clinet_handler import ClientHandler
 from utils.config_manager import ConfigManager
-
+from json import dumps as json_dumps
 class socket_server:
+
     """
     -----this class for create socket stream TCP protocol :)
     """
@@ -23,11 +24,11 @@ class socket_server:
         #initializar ConfigManager Class
         self.config_manager=ConfigManager()
 
-        self.socket_connection=socket(AF_INET,SOCK_STREAM)
+        self.socket_connection : object = socket(AF_INET,SOCK_STREAM)
         self.socket_connection.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
 
+
         self.__start__()
-    
     def __start__(self):
         """
         ---- this method try to bind to socket_connection ;)
@@ -43,25 +44,23 @@ class socket_server:
         self.socket_connection.listen(
             self.config_manager.get.socket_server.LISTEN_CLIENT
         )
-        print(
-            "=> [+] Server ready to listening ... "
-        )
+
+        print("=> [+] Server ready to listening ... ")
 
     def run(self):
+
         """
         ----- start server for listen clinets
         """
+
         client, client_address = self.socket_connection.accept()
-
-        print(
-
-            "=> [+] Some Client connected to server with (%s)"%str(client_address)
-        )
-
+        print("=> [+] Some Client connected to server with (%s)"%str(client_address))
         # initializer Client Handler Class for connect client to the server
+        
+        
         ClientHandler(
             client=client,
             client_address=client_address
         ).start()
-        
+
         self.run()

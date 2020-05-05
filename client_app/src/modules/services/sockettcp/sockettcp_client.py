@@ -29,10 +29,7 @@ class SocketClientTCP:
         ---- this method try connect to the server
         """
         
-        print(
-
-            "[+] Try connecting to server ..."
-        )
+        print("[+] Try connecting to server ...")
 
         response_code = self.sock.connect_ex(
             (
@@ -40,12 +37,11 @@ class SocketClientTCP:
                 self.config_manager.get().socket_server.PORT,
             )
         )
-
+        
         if response_code == 0:
+            
             CommandHandler(client_socket=self.sock).start()
 
         elif response_code == 111:
-            print(
-                "[-] server no responed maybe it is down ..."
-            )
+            print("[-] server no responed maybe it is down ...")
 

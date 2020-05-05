@@ -1,5 +1,6 @@
 from peewee import ( 
-    CharField
+    CharField,
+    BooleanField
 )
 from modules.models.base_model import BaseModel
 

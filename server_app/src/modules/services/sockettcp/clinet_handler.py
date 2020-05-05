@@ -17,7 +17,6 @@ class ClientHandler(Thread):
 
         self.client = client
         self.client_address = client_address
-
         self.first_message = False
 
     def run(self):
@@ -38,7 +37,7 @@ class ClientHandler(Thread):
 
             sleep(.1)
 
-            self.client.sendall(str(
+            self.client.send(str(
                 json_dumps({
                     "message": "",
                     "command": "AUTH",
