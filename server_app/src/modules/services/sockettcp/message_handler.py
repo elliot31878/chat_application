@@ -118,7 +118,7 @@ class MessageHandler:
 
             if ( not(self.select_user in clients.values() ) or ( self.username==self.select_user )  or ( self.select_user in private_clients.values() ) or not ( len( private_clients.values() ) <=2) and len(private_clients.values())%2==0):
                 print("values :",private_clients.values())
-                self.send_message_to_client("this username not valid","LOGIN","server","broadcast")
+                self.send_message_to_client("this username not valid","ERROR","server","broadcast")
                 self.display(self.username)
                 return
             self.send_message_to_client("","chat","server","broadcast")
