@@ -37,7 +37,7 @@ class ClientHandler(Thread):
 
             sleep(.1)
 
-            self.client.send(str(
+            self.client.sendall(str(
                 json_dumps({
                     "message": "",
                     "command": "AUTH",
