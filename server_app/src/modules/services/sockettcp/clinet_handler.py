@@ -26,27 +26,35 @@ class ClientHandler(Thread):
         if not self.first_message:
             
             #send welcome message to server
-            self.client.sendall(str(
-                json_dumps({
-                    "message": "Welcome to Server ,Dude",
-                    "command": "START",
-                    "from": "server",
-                    "group": "brodcast"
-                })
-            ).encode("utf-8"))
-
+            self.send_message_to_client("Welcome to Server , Dude","START","server","broadcast")
             sleep(.1)
+            self.send_message_to_client("","AUTH","server","broadcast")
 
-            self.client.sendall(str(
-                json_dumps({
-                    "message": "",
-                    "command": "AUTH",
-                    "from": "server",
-                    "group": "brodcast"
-                })
-            ).encode("utf-8"))
             self.first_message = False
 
         # Add Class Message Handler
 
         MessageHandler(socket_client=self.client).start()
+        
+    def send_message_to_client(self, message : object, command : str, from_message : str , group : str):
+    
+        """this method for send message from server to clients
+
+        Arguments:
+            message {object} 
+            command {str} 
+            from_message {str}
+            group {str} 
+        """
+        try:
+            self.client.sendall(str(
+                json_dumps({
+                    "message": message,
+                    "command":  command,
+                    "from": from_message,
+                    "group": group
+                })
+            ).encode("utf-8"))
+        except:
+            pass
+    

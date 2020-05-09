@@ -14,7 +14,8 @@ from json import (
     dumps as json_dumps
 )
 from sys import ( 
-    stdout , stdin
+    stdout , stdin ,
+    executable , argv
 )
 from getpass import getpass
 from threading import Thread
@@ -22,6 +23,8 @@ from time import sleep
 
 from commons.constants.shape import Shape
 from commons.constants.colors import Colors
+
+
 class CommandHandler:
 
     def __init__(self, client_socket: socket):
@@ -46,6 +49,7 @@ class CommandHandler:
             self.start()
         except:
             pass
+ 
     def clientSend(self):
 
         """this method for send message to other clients
@@ -68,21 +72,23 @@ class CommandHandler:
             
             recv_msg = self.client_socket.recv(8096).decode('utf-8')
             self.json_data: dict = json_loads(recv_msg)
-            
             if self.json_data["message"] != "{quite}"  : 
                 if self.json_data["message"].strip() !="":
-                    print(
-                        Colors().FORE_CYAN + self.json_data["from"] + Colors().FORE_CYAN, Colors().FORE_YELLOW + ": " + Colors().FORE_YELLOW, self.json_data["message"]
-                        )
-                    print(Colors().FORE_GREEN + "->" + Colors().FORE_GREEN,end="")
-
+                    if self.json_data["from"] != "server":
+                        print(
+                            Colors().FORE_CYAN + self.json_data["from"] + Colors().FORE_CYAN, Colors().FORE_YELLOW + ": " + Colors().FORE_YELLOW, self.json_data["message"]
+                            )
+                        print( Colors().FORE_GREEN + "->" + Colors().FORE_GREEN,end = "")
+                    else:
+                        self.restart_program()
+                        return
+                #recursive
                 self.__recived_caht()
             # recv 'quite' to close 
             else:
                 return
         except Exception as ex:
             return
-
         
     def start_condition(self, json_data: dict):
 
@@ -120,8 +126,10 @@ class CommandHandler:
         elif json_data["command"] == "LOGIN":
             print(Shape(json_data["message"]).prompt_sgape())
             sleep(2.5)
+
         elif json_data["command"] == "display":
             Thread(target = self.display, args = (json_data,)).start()
+
         elif json_data["command"]=="chat":
             try:
                 print(chr(27) + "[2J")
@@ -139,7 +147,6 @@ class CommandHandler:
             except:
                 pass
             
-
     def display(self, json_data : dict):
         """this method for get username that clients can chat with to gether
 
@@ -172,3 +179,12 @@ class CommandHandler:
                 "group": group
             })
         ).encode("utf-8"))
+    
+
+    def restart_program(self):
+        from os import execl
+        """Restarts the current program.
+        Note: this function does not return. Any cleanup action (like
+        saving data) must be done before calling this function."""
+        python = executable
+        execl(python, python, * argv)

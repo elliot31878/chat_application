@@ -18,6 +18,7 @@ from time import sleep
 clients : dict = {}
 private_clients : dict = {}
 #----------------------
+
 class MessageHandler:
     
     def __init__(self, socket_client: socket):
@@ -33,8 +34,6 @@ class MessageHandler:
         ---- this method start Message Hanldleing
         """
         try:
-        
-            global clients
             message: str = self.socket_client.recv(8096).decode("utf-8")
             data_json=json_loads(message)
             #conditions
@@ -55,7 +54,7 @@ class MessageHandler:
         count : int = int(1) # this counter return number users
         ret : str = str()
         for user in clients.values():
-            
+
             if user != username and not(user in private_clients.values()):
                 if count % 2 == 0:
                     ret+="\n"
@@ -87,11 +86,12 @@ class MessageHandler:
                 auth=User.select().where(
                     (User.username == self.username) &(User.password != self.password)
                 )
+
                 if len(auth) > 0 :
                     print("User (%s) Password Is Wrong " %self.username)
                     self.send_message_to_client("[-] Your Password is Wrong ","LOGIN","server","broadcast")
                     self.send_message_to_client( "","AUTH","server","broadcast")
-
+                    return
                 if len(signin) > 0:
                     for client in clients.values():
                         if self.username==client:
@@ -104,11 +104,13 @@ class MessageHandler:
                     clients[self.socket_client]=self.username
 
                 else:
+
                     if len(self.username) <4 or len(self.password) < 8 :
                         print("User (%s) Password or Username Is short " %self.username)
                         self.send_message_to_client("[-] Your Password is Wrong ","LOGIN","server","broadcast")
                         self.send_message_to_client( "","AUTH","server","broadcast")
                         return
+                        
                     User.create(
                     username=self.username,
                     password=self.password
@@ -130,15 +132,13 @@ class MessageHandler:
                     return
                 self.send_message_to_client("","chat","server","broadcast")
                 connection = self.get_connection_with_username(self.select_user)
-
                 self.__send_private_message_between_two_clients( "", self.select_user, con1 =self.socket_client,cmd="request_chat",frm=self.username)
             except Exception as ex:
                 pass
+
         elif data_json["command"] == "msg" :
-            try:
-                self.__send_private_message_between_two_clients( data_json["message"], self.select_user, con1 =self.socket_client,cmd="send_message",frm=self.username)
-            except Exception as ex:
-                pass
+            self.__send_private_message_between_two_clients( data_json["message"], self.select_user, con1 =self.socket_client,cmd="send_message",frm=self.username)
+
         elif data_json["command"] == "{quite}":
             self.__exit()
         
@@ -204,12 +204,9 @@ class MessageHandler:
             client_username {[str]} -- [this argumnet username  client you wnat send message] (default: {None})
         """
 
-        global private_clients, clients
+        global private_clients
+        connection : str =  self.get_connection_with_username(client_username)
 
-        key_list = list(clients.keys())
-        value_list = list(clients.values())
-        connection : str =  key_list[value_list.index(client_username)]
-        
         if connection != con1:
             private_clients[connection] = client_username
             connection.sendall(str(
@@ -229,7 +226,7 @@ class MessageHandler:
         try:
             del clients[self.socket_client]
             del private_clients[self.socket_client]
-            self.__send_private_message_between_two_clients( "{} has left chat".format(self.username), self.select_user, con1 = None,cmd="{quite}",frm="server")             
+            self.__send_private_message_between_two_clients( "{} has left chat".format(self.username), self.select_user, con1 = None,cmd="{quite}",frm="SERVER")             
             self.socket_client.close()
         except:
             pass
