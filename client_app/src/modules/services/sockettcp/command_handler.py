@@ -180,7 +180,6 @@ class CommandHandler:
             })
         ).encode("utf-8"))
     
-
     def restart_program(self):
         from os import execl
         """Restarts the current program.

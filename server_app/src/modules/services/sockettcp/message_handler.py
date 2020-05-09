@@ -37,7 +37,7 @@ class MessageHandler:
             message: str = self.socket_client.recv(8096).decode("utf-8")
             data_json=json_loads(message)
             #conditions
-            self.condition_auth(data_json)
+            self.conditions(data_json)
             #recursive
             self.start()
             del message
@@ -66,7 +66,7 @@ class MessageHandler:
         else:
             self.send_message_to_client("Online User : "+ret,"display","server","broadcast")
 
-    def condition_auth(self, data_json : object):
+    def conditions(self, data_json : object):
         
         """this method for coditions method start
 
