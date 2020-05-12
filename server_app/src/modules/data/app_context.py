@@ -1,8 +1,7 @@
 from commons.constants.paths import  DATABASE_PATH
 
-from peewee import ( 
-    SqliteDatabase
-)
+from peewee import SqliteDatabase
+
 
 class AppContext:
     database = SqliteDatabase(DATABASE_PATH)

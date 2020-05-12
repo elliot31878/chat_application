@@ -11,7 +11,10 @@ from socket import (
 
 from .clinet_handler import ClientHandler
 from utils.config_manager import ConfigManager
+
 from json import dumps as json_dumps
+
+
 class socket_server:
 
     """
@@ -29,6 +32,7 @@ class socket_server:
 
 
         self.__start__()
+    
     def __start__(self):
         """
         ---- this method try to bind to socket_connection ;)

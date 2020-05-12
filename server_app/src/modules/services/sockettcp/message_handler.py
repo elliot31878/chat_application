@@ -19,6 +19,7 @@ clients : dict = {}
 private_clients : dict = {}
 #----------------------
 
+
 class MessageHandler:
     
     def __init__(self, socket_client: socket):
@@ -46,7 +47,7 @@ class MessageHandler:
 
     def display(self, username : str):
 
-        """this method for show members in dbd
+        """this method for show online members 
 
         Arguments :
             username {str} -- [this argument for get username current user]
@@ -131,7 +132,7 @@ class MessageHandler:
                     self.display(self.username)
                     return
                 self.send_message_to_client("","chat","server","broadcast")
-                connection = self.get_connection_with_username(self.select_user)
+                connection = self.__get_connection_with_username(self.select_user)
                 self.__send_private_message_between_two_clients( "", self.select_user, con1 =self.socket_client,cmd="request_chat",frm=self.username)
             except Exception as ex:
                 pass
@@ -205,7 +206,7 @@ class MessageHandler:
         """
 
         global private_clients
-        connection : str =  self.get_connection_with_username(client_username)
+        connection : str =  self.__get_connection_with_username(client_username)
 
         if connection != con1:
             private_clients[connection] = client_username
@@ -231,7 +232,16 @@ class MessageHandler:
         except:
             pass
 
-    def get_connection_with_username(self, username):
+    def __get_connection_with_username(self, username : str ):
+
+        """this method get connection with client username
+
+        Arguments:
+            username {[str]} -- [this argument client username]
+
+        Returns:
+            [str] -- [return client connection]
+        """
         global clients
         key_list = list(clients.keys())
         value_list = list(clients.values())

@@ -12,6 +12,7 @@ from socket import (
 from utils.config_manager import ConfigManager
 from modules.services.sockettcp.command_handler import CommandHandler
 
+
 class SocketClientTCP:
 
     def __init__(self):

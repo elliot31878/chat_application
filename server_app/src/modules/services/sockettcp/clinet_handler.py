@@ -11,6 +11,7 @@ from time import sleep
 
 from .message_handler import MessageHandler
 
+
 class ClientHandler(Thread):
     def __init__(self, client : object, client_address: object):
         Thread.__init__(self)
