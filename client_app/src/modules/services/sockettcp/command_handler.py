@@ -46,6 +46,8 @@ class CommandHandler:
             self.start_condition(self.json_data)
             #recursive
             self.start()
+            
+            del self.msg
         except:
             pass
  

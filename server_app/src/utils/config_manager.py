@@ -30,7 +30,7 @@ class ConfigManager:
         """
         this method for get value in dictianory
         Returns:
-            [object] -- [key value dictionary]
+            [dict] -- [key value dictionary]
         """
         e_dict=edict(self.__read_config__())
         return e_dict

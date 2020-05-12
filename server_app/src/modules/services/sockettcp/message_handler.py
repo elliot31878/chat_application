@@ -13,6 +13,7 @@ from socket import socket
 from modules.models.user import User
 
 from time import sleep
+
 #----------------------
 # global varible
 clients : dict = {}
@@ -93,6 +94,7 @@ class MessageHandler:
                     self.send_message_to_client("[-] Your Password is Wrong ","LOGIN","server","broadcast")
                     self.send_message_to_client( "","AUTH","server","broadcast")
                     return
+
                 if len(signin) > 0:
                     for client in clients.values():
                         if self.username==client:
@@ -106,9 +108,9 @@ class MessageHandler:
 
                 else:
 
-                    if len(self.username) <4 or len(self.password) < 8 :
+                    if len(self.username) <3 or len(self.password) < 8 :
                         print("User (%s) Password or Username Is short " %self.username)
-                        self.send_message_to_client("[-] Your Password is Wrong ","LOGIN","server","broadcast")
+                        self.send_message_to_client("[-] User (%s) Password or Username Is short ","LOGIN","server","broadcast")
                         self.send_message_to_client( "","AUTH","server","broadcast")
                         return
                         
@@ -206,8 +208,8 @@ class MessageHandler:
         """
 
         global private_clients
-        connection : str =  self.__get_connection_with_username(client_username)
 
+        connection : str =  self.__get_connection_with_username(client_username)
         if connection != con1:
             private_clients[connection] = client_username
             connection.sendall(str(
